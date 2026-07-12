@@ -71,7 +71,7 @@ Open the URL displayed in the terminal (usually `http://localhost:5173`).
 
 ## 📸 Application Screenshot
 
-![Todo App Screenshot](./screenshot/application-page-screenshot.png)
+![Todo App Screenshot](./screenshot/Application-page-screenshot.png)
 
 ## 🧠 Functionality Overview
 
