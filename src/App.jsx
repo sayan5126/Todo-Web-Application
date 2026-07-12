@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react'
 import {TodoContextProvider , } from './context/index.js'
+import TodoForm from './components/TodoForm.jsx'
+import TodoItem from './components/TodoItem.jsx'
 
 function App() {
   const [todos , setTodos] = useState([])
 
   const addTodo = (todo) => {   // Adds a new todo with a unique timestamp-based ID and prepends it to the existing todo list.
-    setTodo((oldTodos) => [{id : Date.now() , ...todo} , ...oldTodos])
+    setTodos((oldTodos) => [{id : Date.now() , ...todo} , ...oldTodos])
   }
 
   const updateTodo = (id,todo) => {   // Updates the todo matching the given ID by mapping through the existing list and replacing only the matched todo while keeping all other todos unchanged.
-    setTodo((oldTodos) => oldTodos.map((oldTodo)=> (oldTodo.id === id) ? todo : oldTodo));
+    setTodos((oldTodos) => oldTodos.map((oldTodo)=> (oldTodo.id === id) ? todo : oldTodo));
   }
 
   const deleteTodo = (id) => {    // Deletes the todo matching the given ID by filtering it out of the existing list while keeping all other todos unchanged.
-    setTodo((oldTodos) => oldTodos.filter((oldTodo)=> oldTodo.id !== id))
+    setTodos((oldTodos) => oldTodos.filter((oldTodo)=> oldTodo.id !== id))
   }
 
   const toggleCompleted = (id) => {   // Toggles the completed status of the todo matching the given ID by creating a new updated object while leaving all other todos unchanged.
-    setTodo((oldTodos)=> oldTodos.map((oldTodo)=> (oldTodo.id === id) ? {...oldTodo,completed: !oldTodo.completed} : oldTodo))
+    setTodos((oldTodos)=> oldTodos.map((oldTodo)=> (oldTodo.id === id) ? {...oldTodo,completed: !oldTodo.completed} : oldTodo))
   }
   
   // Runs once when the component mounts to load saved todos from localStorage, converts the stored JSON string back into an array, and restores it to state only if valid todos exist.
@@ -40,9 +42,17 @@ function App() {
           <h1 className="text-2xl font-bold text-center mb-8 mt-2">Manage Your Todos</h1>
           <div className="mb-4">
             {/* Todo form goes here */}
+            <TodoForm/>
           </div>
           <div className="flex flex-wrap gap-y-3">
             {/*Loop and Add TodoItem here */}
+            {todos.map((todo)=>{
+              return(
+                <div key={todo.id} className='w-full'>
+                  <TodoItem todo = {todo} />
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

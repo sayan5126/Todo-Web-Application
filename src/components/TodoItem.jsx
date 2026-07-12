@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTodoContext } from "../context";
 
 export default function TodoItem({ todo }) {
-    const [todoMsg , setTodoMsg] = useState();
+    const [todoMsg , setTodoMsg] = useState(todo.todoMsg);
     const [isTodoEditable , setIsTodoEditable] = useState()
     const {updateTodo , deleteTodo , toggleCompleted} = useTodoContext()
     const editTodo = () =>{
