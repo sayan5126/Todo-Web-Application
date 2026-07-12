@@ -1,15 +1,39 @@
 import { useState } from 'react'
-import './App.css'
+import {TodoContextProvider , } from './context/index.js'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todo , setTodo] = useState([])
 
+  const addTodo = (todo) => {   // Adds a new todo with a unique timestamp-based ID and prepends it to the existing todo list.
+    setTodo((oldTodos) => [{id : Date.now() , ...todo} , ...oldTodos])
+  }
+
+  const updateTodo = (id,todo) => {   // Updates the todo matching the given ID by mapping through the existing list and replacing only the matched todo while keeping all other todos unchanged.
+    setTodo((oldTodos) => oldTodos.map((oldTodo)=> (oldTodo.id === id) ? todo : oldTodo));
+  }
+
+  const deleteTodo = (id) => {    // Deletes the todo matching the given ID by filtering it out of the existing list while keeping all other todos unchanged.
+    setTodo((oldTodos) => oldTodos.filter((oldTodo)=> oldTodo.id !== id))
+  }
+
+  const toggleCompleted = (id) => {   // Toggles the completed status of the todo matching the given ID by creating a new updated object while leaving all other todos unchanged.
+    setTodo((oldTodos)=> oldTodos.map((oldTodo)=> (oldTodo.id === id) ? {...oldTodo,completed: !oldTodo.completed} : oldTodo))
+  }
+  
   return (
-    <>
-    <h1 className="text-3xl font-bold underline text-center">
-    Hello world!
-  </h1>
-    </>
+    <TodoContextProvider value={{todos,addTodo,updateTodo,deleteTodo,toggleCompleted}}>
+      <div className="bg-[#172842] min-h-screen py-8">
+        <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
+          <h1 className="text-2xl font-bold text-center mb-8 mt-2">Manage Your Todos</h1>
+          <div className="mb-4">
+            {/* Todo form goes here */}
+          </div>
+          <div className="flex flex-wrap gap-y-3">
+            {/*Loop and Add TodoItem here */}
+          </div>
+        </div>
+      </div>
+    </TodoContextProvider>
   )
 }
 
