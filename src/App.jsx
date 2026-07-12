@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {TodoContextProvider , } from './context/index.js'
 
 function App() {
-  const [todo , setTodo] = useState([])
+  const [todos , setTodos] = useState([])
 
   const addTodo = (todo) => {   // Adds a new todo with a unique timestamp-based ID and prepends it to the existing todo list.
     setTodo((oldTodos) => [{id : Date.now() , ...todo} , ...oldTodos])
@@ -19,6 +19,19 @@ function App() {
   const toggleCompleted = (id) => {   // Toggles the completed status of the todo matching the given ID by creating a new updated object while leaving all other todos unchanged.
     setTodo((oldTodos)=> oldTodos.map((oldTodo)=> (oldTodo.id === id) ? {...oldTodo,completed: !oldTodo.completed} : oldTodo))
   }
+  
+  // Runs once when the component mounts to load saved todos from localStorage, converts the stored JSON string back into an array, and restores it to state only if valid todos exist.
+  useEffect(()=>{
+    const todos = JSON.parse(localStorage.getItem("todos"))
+    if(todos && todos.length > 0){
+      setTodos(todos);
+    }
+  },[])
+
+  // Runs every time the todos state changes and saves the updated todo list to localStorage by converting the array into a JSON string, ensuring data persists even after the page is refreshed or reopened.
+  useEffect(()=>{
+    localStorage.setItem("todos",JSON.stringify(todos));
+  },[todos])
   
   return (
     <TodoContextProvider value={{todos,addTodo,updateTodo,deleteTodo,toggleCompleted}}>
