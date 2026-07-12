@@ -1,6 +1,17 @@
-export default function TodoItem({ todo }) {
-    
+import { useState } from "react";
+import { useTodoContext } from "../context";
 
+export default function TodoItem({ todo }) {
+    const [todoMsg , setTodoMsg] = useState();
+    const [isTodoEditable , setIsTodoEditable] = useState()
+    const {updateTodo , deleteTodo , toggleCompleted} = useTodoContext()
+    const editTodo = () =>{
+        updateTodo(todo.id , {...todo,todoMsg : todoMsg})
+        setIsTodoEditable(false)
+    }
+    const toggleComplete = ()=>{
+        toggleCompleted(todo.id);
+    }
     return (
         <div
             className={`flex border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${
@@ -11,7 +22,7 @@ export default function TodoItem({ todo }) {
                 type="checkbox"
                 className="cursor-pointer"
                 checked={todo.completed}
-                onChange={toggleCompleted}
+                onChange={toggleComplete}
             />
             <input
                 type="text"
